@@ -1,0 +1,48 @@
+<h1>Checkout</h1>
+
+<h2>Cart Information</h2>
+<% if @cart_items.present? && @cart_items.any? %>
+  <ul>
+    <% @cart_items.each do |item| %>
+      <% product = @product_lookup[item["product_id"].to_i] %>
+      <% if product %>
+        <li>
+          <%= product.name %> (ID: <%= product.id %>)
+          - Quantity: <%= item["quantity"] %>
+        </li>
+      <% else %>
+        <li>Product with ID <%= item["product_id"] %> not found.</li>
+      <% end %>
+    <% end %>
+  </ul>
+<% else %>
+  <p>Your cart is empty.</p>
+<% end %>
+
+<h2>Billing Information</h2>
+<%= form_with(model: @order, url: place_order_path, local: true) do |form| %>
+  <div class="field">
+    <%= form.label :customer_name %>
+    <%= form.text_field :customer_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :customer_email %>
+    <%= form.email_field :customer_email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :customer_phone %>
+    <%= form.text_field :customer_phone %>
+  </div>
+
+ 
+
+  <h2>Total Amount</h2>
+  <% total_amount = @cart_items.sum { |item| @product_lookup[item["product_id"].to_i].unit_price * item["quantity"] } %>
+  <p>Total: <%= number_to_currency(total_amount) %> (including GST)</p>
+
+  <div class="actions">
+    <%= form.submit "Place Order" %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+<%= render 'shared/errors',obj:@contact_us_request%>
+<%= form_with model: @contact_us_request, local: true do |form| %>
+  
+
+  <div class="field">
+    <%= form.label :customer_name %>
+    <%= form.text_field :customer_name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :customer_email %>
+    <%= form.email_field :customer_email %>
+  </div>
+
+  <div class="field">
+    <%= form.label :message %>
+    <%= form.text_area :message %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Send Message" %>
+  </div>
+<% end %>

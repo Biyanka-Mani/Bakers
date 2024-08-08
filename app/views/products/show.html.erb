@@ -1,0 +1,24 @@
+<p>
+  <strong>Name:</strong>
+  <%= @product.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @product.description %>
+</p>
+
+<p>
+  <strong>Images:</strong>
+  <% @product.images.each do |image| %>
+    <%= image_tag image %>
+  <% end %>
+</p>
+<%= form_with url:add_to_cart_cart_path, method: :post, local: true do |form| %>
+  <%= form.hidden_field :product_id, value: @product.id %>
+  <div class="field">
+    <%= form.label :quantity %>
+    <%= form.number_field :quantity, value: 1, min: 1 %>
+  </div>
+  <%= form.submit 'Add to Cart' %>
+<% end %>

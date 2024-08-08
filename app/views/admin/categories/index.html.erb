@@ -1,0 +1,83 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="display-4">Categories</h1>
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add A Category
+  </button>
+</div>
+
+
+
+<table class="table align-middle my-5 bg-white">
+  <thead class="bg-light">
+    <tr class="p-5">
+      <th><div class="mx-5">Category Name</div></th>
+      <th><div class="mx-3">Date</div></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @categories.each do |category| %>
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                <%= image_tag category.categoryimage.attached? ? url_for(category.categoryimage) : 'https://mdbootstrap.com/img/new/avatars/8.jpg',
+                alt: category.name, style: 'width: 45px; height: 45px', class: 'img-thumbnail' %>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%= category.name %></p>
+                </div>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= category.created_at.strftime("%d-%m-%Y") %></p>
+                </div>
+            </td>
+            <td>
+           <a href="<%= admin_category_path(category) %>" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="btn btn-primary rounded-pill">
+            Delete
+            </a>
+            </td>
+        </tr>
+   <% end %> 
+  </tbody>
+</table>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+         <%= form_with(model: [:admin,@category],class:"modal-body",local: true) do |f| %>
+            <div class="mb-3">
+                
+                 <%= f.label :name,"Name Of Category",class:"form-label"%>
+                  <%= f.text_field :name,class:"form-control shadow p-2 bg-body-tertiary rounded",placeholder:"Enter name" %>
+            </div>
+            <div class="mb-3">
+                 <%= f.label :categoryimage,"Image", class:"form-label" %>
+                <%= f.file_field :categoryimage, class: "form-control", type:"file", id:"formFile"%>
+            </div>
+     
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <%= f.submit "Save", class: "btn btn-primary" %>
+      </div>
+       <% end %>
+    </div>
+  </div>
+</div>
+<script>
+var myModal = document.getElementById('myModal')
+var myInput = document.getElementById('myInput')
+
+myModal.addEventListener('shown.bs.modal', function () {
+  myInput.focus()
+})
+</script>
+

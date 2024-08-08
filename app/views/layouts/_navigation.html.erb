@@ -1,0 +1,104 @@
+<div class="container-flouid">
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <h3>Your Logo</h3>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Member</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Courses</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Blog</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Event</a>
+          </li>
+          <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Categories
+                    </a>
+                    <ul class="dropdown-menu">
+                        <%if user_signed_in?%>
+                             <%= link_to  'Create A New Category',new_category_path,class:"dropdown-item"%> 
+                              <%= link_to 'categories',  categories_path,class:"dropdown-item"%>
+                        <%end %>
+                       
+                    </ul>
+        </li>
+        <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Products
+                    </a>
+                    <ul class="dropdown-menu">
+                        <%if user_signed_in?%>
+                             <%= link_to  'Create A New Product', new_admin_product_path,class:"dropdown-item"%> 
+                             <%end %>
+                              <%= link_to 'products',  products_path,class:"dropdown-item"%>
+                        
+                       
+                    </ul>
+        </li>
+        <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Place Order
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                             <%= link_to  'Create A New Order',new_order_path,class:"dropdown-item"%> 
+                              <%= link_to  'See Orders', admin_orders_path,class:"dropdown-item"%> 
+                       
+                       
+                    </ul>
+        </li>
+        <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Contact Us
+                    </a>
+                    <ul class="dropdown-menu">
+                        <%if user_signed_in?%>
+                             <%= link_to  'Create A Enquiry',new_contact_us_request_path,class:"dropdown-item"%> 
+                              <%= link_to 'Enquirie',  contact_us_requests_path,class:"dropdown-item"%>
+                        <%end %>
+                       
+                    </ul>
+        </li>
+        <li class="nav-item dropdown">
+                    
+                  <%= link_to  'See Cart',cart_path,class:"dropdown-item"%> 
+                       
+                    
+        </li>
+        </ul>
+              
+        
+         <% if user_signed_in?%>
+         <div class="nav-item">
+                  <%= link_to  destroy_user_session_path ,class:"nav-link active fs-4 me-3", data: {
+                          turbo_method: :delete,
+                          turbo_confirm: "Are you sure?"
+                        }  do %>Logout
+                      <i class="fa fa-sign-out fs-5"></i>
+                  <%end%>
+          </div>
+           <%= link_to  "Add User",new_admin_user_path ,class:"nav-link active fs-4 me-3" %>
+              <%else%>    
+            <form class="">
+              <a class="btn btn-outline-primary mr-2" href="#">Login</a>
+              <a class="btn btn-outline-success" href="#">Become member</a>
+            </form>
+          <%end%>
+
+      </div>
+    </div>
+  </nav>
+</div>

@@ -1,0 +1,12 @@
+  <% @cart_items.each do |item| %>
+  <% product = @product_lookup[item["product_id"].to_i] %>
+  <% if product %>
+    <li>
+      <%= product.name %> (ID: <%= product.id %>)
+      - Quantity: <%= item["quantity"] %>
+    </li>
+  <% else %>
+    <li>Product with ID <%= item["product_id"] %> not found.</li>
+  <% end %>
+<% end %>
+

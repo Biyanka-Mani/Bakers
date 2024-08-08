@@ -1,0 +1,111 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="display-4">Products</h1>
+  <!-- Button trigger modal -->
+  
+   <%= link_to new_admin_product_path, class: "btn  custom-btn me-2" do %>
+                <i class="bi bi-eye-fill me-2"></i>Add New Product
+    <% end %>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <%= form_with(url: admin_products_path, method: :get, local: true, class: "form-inline") do |form| %>
+    <div class="input-group">
+      <%= form.text_field :search_term, class: "form-control", placeholder: "Search products..." %>
+      <div class="input-group-append">
+        <%= form.submit "Search", class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+
+<table class="table align-middle my-5 bg-white table-striped">
+  <thead class="bg-light">
+    <tr class="p-5">
+      <th><div class="mx-1">Product</div></th>
+      <th><div class="mx-3">Name</div></th>
+      <th><div class="mx-3">Created Date</div></th>
+      <th><div class="mx-3">Category</div></th>
+      <th><div class="mx-1">Stock Quantity</div></th>
+      <th><div class="mx-1">Unit Price</div></th>
+       <th><div class="mx-1">Veg/Non Veg</div></th>
+      <th><div class="mx-3">Actions</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @products.each do |product| %>
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                    <% if product.images.attached? %>
+                        <%= image_tag product.images.first,
+                                    alt: product.name,
+                                    width: 60,
+                                    height: 60,
+                                    class: 'img-thumbnail' %>
+                    <% else %>
+                        <%= image_tag 'https://mdbootstrap.com/img/new/avatars/8.jpg',
+                                    alt: product.name,
+                                    width: 60,
+                                    height: 60,
+                                    class: 'img-thumbnail' %>
+                    <% end %>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%= product.name %></p>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= product.created_at.strftime("%d-%m-%Y") %></p>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <%= product.category.name %>
+                </div>
+            </td>
+             <td>
+                <div class="ms-3">
+                    <% if product.stock_quantity == 0 %>
+                        <span class="badge bg-danger">Out of Stock</span>
+                    <% else %>
+                        <p class="fw-lead  mx-3"><%= product.stock_quantity %></p>
+                    <% end %>
+                </div>
+            </td>
+             <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= number_to_currency(product.unit_price) %></p>
+                </div>
+            </td>
+            <td>
+             <div class="ms-3">
+                <% if product.is_vegetarian %>
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                <% else %>
+                <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                <% end %>
+             </div>
+            </td>
+            <td>
+             <div class="d-flex ">
+                <%= link_to admin_product_path(product), class: "btn btn-link text-success me-2" do %>
+                <i class="bi bi-eye-fill"></i>
+                <% end %>
+                <%= link_to edit_admin_product_path(product), class: "btn btn-link custom-btn" do %>
+                <i class="bi bi-pencil-fill"></i>
+                <% end %>
+                <%= link_to admin_product_path(product), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link text-danger" do %>
+                <i class="bi bi-trash-fill"></i>
+                <% end %>
+                </div>
+            
+
+            </td>
+        </tr>
+   <% end %> 
+  </tbody>
+</table>

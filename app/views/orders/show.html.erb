@@ -1,0 +1,42 @@
+<!-- app/views/orders/show.html.erb -->
+<p>
+  <strong>Customer Name:</strong>
+  <%= @order.customer_name %>
+</p>
+
+<p>
+  <strong>Customer Phone:</strong>
+  <%= @order.customer_phone %>
+</p>
+
+<p>
+  <strong>Customer Email:</strong>
+  <%= @order.customer_email %>
+</p>
+
+<p>
+  <strong>Order Status:</strong>
+  <%= @order.order_status  %>
+</p>
+
+
+
+<% if @order.picked_up? %>
+  <p>
+    <strong>Picked Up At:</strong>
+    <%= @order.picked_up_at %>
+  </p>
+<% end %>
+<p>
+  <strong>Total Amount:</strong>
+  <%= number_to_currency(@order.total_amount) %>
+</p>
+
+<h3>Ordered Products</h3>
+<ul>
+  <% @order.products.each do |product| %>
+    <li>
+      <%= product.name %> - Quantity: <%= @order.order_products.find_by(product_id: product.id).quantity %>
+    </li>
+  <% end %>
+</ul>

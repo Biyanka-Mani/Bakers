@@ -1,0 +1,95 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="display-4">Orders </h1>
+ 
+</div>
+<%= form_with(url: admin_orders_path, method: :get, local: true, class: 'mb-4') do %>
+  <div class="row">
+    <div class="col-md-3">
+      <%= label_tag :order_status, 'Order Status' %>
+      <%= select_tag :order_status, options_for_select(Order.order_statuses.keys.map { |status| [status.humanize, status] }, params[:order_status]), include_blank: true, class: 'form-control' %>
+    </div>
+    <div class="col-md-3">
+      <%= label_tag :start_date, 'Start Date' %>
+      <%= date_field_tag :start_date, params[:start_date], class: 'form-control', min: 1.year.ago.to_date, max: Date.today  %>
+    </div>
+    <div class="col-md-3">
+      <%= label_tag :end_date, 'End Date' %>
+      <%= date_field_tag :end_date, params[:end_date], class: 'form-control', min: 1.year.ago.to_date, max: Date.today %>
+    </div>
+    <div class="col-md-3">
+      <%= label_tag :sort_by_status, 'Sort by Status' %>
+      <%= select_tag :sort_by_status, options_for_select([['Ascending', 'asc'], ['Descending', 'desc']], params[:sort_by_status]), include_blank: true, class: 'form-control' %>
+    </div>
+  </div>
+  <div class="row mt-3">
+    <div class="col-md-12">
+      <%= submit_tag 'Filter', class: 'btn btn-primary' %>
+      <%= link_to 'Clear', admin_orders_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+<% end %>
+
+<table class="table align-middle my-5 bg-white table-striped">
+  <thead class="bg-light">
+    <tr class="p-5">
+     <th>Order ID</th>
+     <th><div class="mx-3">Order Date</div></th>
+      <th>Customer Name</th>
+      <th scope="col">Phone Number</th>
+      <th scope="col">Status</th>
+      <th scope="col">Paid Amount</th>
+      <th scope="col">Order Details</th>
+      <th scope="col">Picked Up Time</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+   <% @orders.each do |order| %>
+        <tr>
+            <td>
+              <p class="fw-lead mb-1"> <%=order.id %></p>
+            </td>
+            <td>
+                <p class="fw-lead mb-1"> <%=order.created_at.strftime("%d-%m %I:%M %p")%></p>
+            </td>
+            <td>
+                <p class="fw-lead mb-1"> <%=order.customer_name %></p>
+            </td>
+            <td>
+                <p class="fw-lead mb-1"> <%=order.customer_phone %></p>
+            </td>
+            <td>
+                <p class="fw-lead mb-1">
+                <span class="badge rounded-pill <%= badge_class_for_order_status(order.order_status) %>">
+                    <%= order.order_status.humanize %>
+                </span>
+                <p>
+            </td>
+             <td>
+                <p class="fw-lead mb-1"> <%= number_to_currency(order.total_amount) %></p>
+            </td>
+            <td>
+                <span class="me-3">
+                    <%= link_to  admin_order_path(order), class: 'me-2 btn custom-btn' do %>
+                        <i class="bi bi-box me-2"></i>See Order
+                    <% end %>
+                </span>
+            </td> 
+            
+            
+            <td>
+                <% if order.picked_up_at == nil %>
+                    <span class="badge rounded-pill bg-warning text-dark"> yet To Picked Up</span>
+                <% else %>
+                    <p class="fw-lead mb-1"> <%=order.picked_up_at.strftime("%d-%m %I:%M %p")%></p>
+                <%end%>
+            </td>
+             
+        </tr>
+   <% end %> 
+   
+  </tbody>
+</table>
+<div class="flickr_pagination">
+    <%= will_paginate @orders, :container => false %>
+</div>

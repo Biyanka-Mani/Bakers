@@ -1,0 +1,35 @@
+<h3>Ordered Products</h3>
+<table class="table align-middle my-5 bg-white table-striped">
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Product Name</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.products.each do |product| %>
+      <tr>
+        <td>
+          <% if product.images.attached? %>
+            <%= image_tag product.images.first,
+                          alt: product.name,
+                          width: 60,
+                          height: 60,
+                          class: 'img-thumbnail' %>
+          <% else %>
+            <%= image_tag 'https://mdbootstrap.com/img/new/avatars/8.jpg',
+                          alt: product.name,
+                          width: 60,
+                          height: 60,
+                          class: 'img-thumbnail' %>
+          <% end %>
+        </td>
+        <td><%= product.name %></td>
+        <td><%= @order.order_products.find_by(product_id: product.id).quantity %></td>
+        <td><%= number_to_currency(@order.order_products.find_by(product_id: product.id).price) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
