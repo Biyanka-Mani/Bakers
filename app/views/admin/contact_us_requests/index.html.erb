@@ -1,0 +1,86 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="display-4">Enquiries</h1>
+ 
+</div>
+
+
+
+<table class="table align-middle my-5 bg-white table-striped">
+  <thead class="bg-light">
+    <tr class="p-5">
+      <th>Message Id</th>
+      <th><div class="mx-3">Date</div></th>
+      <th><div class="mx-5">Customer</div></th>
+      <th><div class="mx-3">Email</div></th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @contact_us_requests.each do |request| %>
+        <tr>
+            <td>
+               
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%=request.id %></p>
+                </div>
+                
+            </td>
+            <td>
+                 <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%=request.created_at.strftime("%d-%m-%Y") %></p>
+                </div>
+                
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= request.customer_name %></p>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= request.customer_email %></p>
+                </div>
+            </td>
+            <td>
+            <a href="<%= admin_contact_us_request_path(request) %>" data-turbo-method="delete" data-turbo-confirm="Are you sure?" class="btn btn-primary rounded-pill">
+                Delete
+            </a>
+                 
+             <!-- Button trigger modal -->
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#messageModal-<%= request.id %>">
+            Message
+          </button>
+            </td>
+        </tr>
+          <!-- Modal -->
+      <div class="modal fade" id="messageModal-<%= request.id %>" tabindex="-1" aria-labelledby="messageModalLabel-<%= request.id %>" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="messageModalLabel-<%= request.id %>">Message Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Message from <%= request.customer_name %>:</strong></p>
+              <p><%= request.message %></p> <!-- Assuming 'message' is the attribute holding the message text -->
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+   <% end %> 
+  </tbody>
+</table>
+<!-- Modal -->
+
+<script>
+  var modals = document.querySelectorAll('.modal');
+  modals.forEach(function(modal) {
+    modal.addEventListener('shown.bs.modal', function () {
+      var input = modal.querySelector('input');
+      if (input) input.focus();
+    });
+  });
+</script>

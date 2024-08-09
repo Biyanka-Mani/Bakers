@@ -1,19 +1,35 @@
 # app/controllers/carts_controller.rb
 class CartsController < ApplicationController
   def add_to_cart
-    product_id = params[:product_id]
+    product = Product.find(params[:product_id])
     quantity = params[:quantity].to_i
-     # Initialize the cart in the session if not already present
-     session[:cart] ||= []
-    
-     # Check if product is already in the cart
-     existing_item = session[:cart].find { |item| item["product_id"] == product_id }
-     if existing_item
-      existing_item["quantity"] = (existing_item["quantity"].to_i + quantity)
-     else
-       session[:cart] << { product_id: product_id, quantity: quantity }
-     end
-    
+
+    if !product.in_stock?
+      flash[:alert] = "Sorry, this product is out of stock."
+      redirect_back(fallback_location: root_path) and return
+    end
+
+    if !product.available_quantity?(quantity)
+      flash[:alert] = "Sorry, only #{product.stock_quantity} item(s) available."
+      redirect_back(fallback_location: root_path) and return
+    end
+
+    session[:cart] ||= []
+    existing_item = session[:cart].find { |item| item["product_id"] == params[:product_id] }
+
+    if existing_item
+      new_quantity = existing_item["quantity"].to_i + quantity
+      if product.available_quantity?(new_quantity)
+        existing_item["quantity"] = new_quantity
+      else
+        flash[:alert] = "Sorry, can't add more. Only #{product.stock_quantity} item(s) available in total."
+        redirect_back(fallback_location: root_path) and return
+      end
+    else
+      session[:cart] << { product_id: params[:product_id], quantity: quantity }
+    end
+
+    flash[:notice] = "Product added to cart successfully."
     redirect_to cart_path
   end
 
@@ -25,6 +41,28 @@ class CartsController < ApplicationController
     debugger
   end
 
+
+  def update
+    product_id = params[:product_id]
+    quantity = params[:quantity].to_i
+
+    # Find the item in the cart
+    item = session[:cart].find { |item| item["product_id"] == product_id }
+    if item
+      item["quantity"] = quantity
+    end
+
+    redirect_to cart_path
+  end
+
+  def remove
+    product_id = params[:product_id]
+
+    # Remove the item from the cart
+    session[:cart].reject! { |item| item["product_id"] == product_id }
+
+    redirect_to cart_path
+  end
   def checkout
     # @order = Order.new
     # @order.order_products_attributes = session[:cart].map do |item|
@@ -37,6 +75,7 @@ class CartsController < ApplicationController
     @products = Product.where(id: product_ids)
     @product_lookup = @products.index_by(&:id)
     @order=Order.new()
+    @total_amount = calculate_total_amount 
   end
 
   def place_order
@@ -66,13 +105,13 @@ class CartsController < ApplicationController
     if order_saved && @order.errors.empty?
       OrderMailer.with(order: @order).new_order_email.deliver_later
       session[:cart] = []
-      redirect_to @order, notice: 'Order was successfully created.'
+      redirect_to  confirmation_order_path(@order), notice: 'Your order has been placed successfully!'
     else
       @order.destroy if order_saved
-      render :checkout
+      render :checkout, alert: 'Your order has been placed successfully!'
     end
   end
-  
+
 
   private
 
@@ -84,5 +123,6 @@ class CartsController < ApplicationController
     products = Product.where(id: @cart_items.map { |item| item["product_id"].to_i })
     return @cart_items.sum { |item| products.find { |p| p.id == item["product_id"].to_i }.unit_price * item["quantity"] }
   end
+  
 end
 

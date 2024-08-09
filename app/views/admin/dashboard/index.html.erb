@@ -1,0 +1,78 @@
+<div class="container-fluid mt-4">
+  <h1 class="mb-4">Dashboard</h1>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Orders</h5>
+          <h2 class="card-text"><%= @total_orders %></h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Pending</h5>
+          <h2 class="card-text"><%= @total_pending %></h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Enquiries</h5>
+          <h2 class="card-text"><%= @total_enquiries %></h2>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Total Sales</h5>
+          <h2 class="card-text"><%= number_to_currency(@total_sales) %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mb-3">Stock Margin Items</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Product ID</th>
+          <th>Category</th>
+          <th>Piece</th>
+          <th>Amount</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @stock_margin_items.each do |product| %>
+          <tr>
+            <td>
+              <% if product.images %>
+                <%= image_tag product.images.first, alt: product.name, class: 'img-thumbnail mr-2', style: 'width: 50px; height: 50px;' %>
+              <% end %>
+              <%= product.name %>
+            </td>
+            <td><%= product.id %></td>
+            <td><%= product.category.name %></td>
+            <td><%= product.stock_quantity %></td>
+            <td><%= number_to_currency(product.unit_price) %></td>
+            <td>
+              <% status_class = case product.stock_status
+                                when 'low_stock' then 'warning'
+                                when 'out_of_stock' then 'danger'
+                                when 'in_stock' then 'success'
+                                end %>
+              <span class="badge bg-<%= status_class %>"><%= product.stock_status.titleize %></span>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

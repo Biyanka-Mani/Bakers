@@ -14,34 +14,10 @@ class OrdersController < ApplicationController
     
   end
 
-  def create
-    @order = Order.new(order_params)
-    @order.order_status = :confirmed
-    @order.total_amount = calculate_total_amount
-    ActiveRecord::Base.transaction do
-      if @order.save
-        session[:cart].each do |item|
-          @order.order_products.create!(product_id: item[:product_id], quantity: item[:quantity],price:item[:price])
-          debugger
-          product = Product.find(item[:product_id])
-          if product.stock_count >= item[:quantity]
-            product.update!(stock_count: product.stock_quantity - item[:quantity])
-           
-            OrderMailer.with(order: @order).new_order_email.deliver_later
-          else
-            @order.errors.add(:base, "Insufficient stock for #{product.name}.")
-            @order.destroy!
-            render :checkout and return
-          end
-        end
-        session[:cart] = []
-        redirect_to @order, notice: 'Order was successfully created.'
-      else
-        render :checkout
-      end
-    end
+
+  def confirmation
+    @order = Order.find(params[:id])
   end
-  
 
   
   private

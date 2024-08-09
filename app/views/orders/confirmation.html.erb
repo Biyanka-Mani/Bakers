@@ -1,0 +1,63 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title text-center mb-4">Thank You for Your Order!</h1>
+      
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <h3>Order Details</h3>
+          <p><strong>Order Number:</strong> #<%= @order.id %></p>
+          <p><strong>Order Status:</strong> <%= @order.order_status.capitalize %></p>
+          <p><strong>Order Date:</strong> <%= @order.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+        </div>
+        <div class="col-md-6">
+          <h3>Customer Information</h3>
+          <p><strong>Name:</strong> <%= @order.customer_name %></p>
+          <p><strong>Email:</strong> <%= @order.customer_email %></p>
+          <p><strong>Phone:</strong> <%= @order.customer_phone %></p>
+        </div>
+      </div>
+
+      <h3>Order Summary</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @order.order_products.each do |order_product| %>
+            <tr>
+              <td><%= order_product.product.name %></td>
+              <td><%= order_product.quantity %></td>
+              <td><%= number_to_currency(order_product.price) %></td>
+              <td><%= number_to_currency(order_product.price * order_product.quantity) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="3" class="text-end">Subtotal:</th>
+            <td><%= number_to_currency(@order.total_amount) %></td>
+          </tr>
+          <tr>
+            <th colspan="3" class="text-end">Tax (5%):</th>
+            <td><%= number_to_currency(@order.total_amount * 0.05) %></td>
+          </tr>
+          <tr>
+            <th colspan="3" class="text-end">Total:</th>
+            <td><strong><%= number_to_currency(@order.total_amount * 1.05) %></strong></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div class="text-center mt-4">
+        <p>Thank you for shopping with us. We hope you enjoy your purchase!</p>
+        <%= link_to "Return to Home", root_path, class: "btn btn-primary" %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,14 +1,16 @@
 class Admin::ProductsController < ApplicationController
+  before_action :find_product,only: [:destroy]
   def new
     @product = Product.new
   end
   def index
     @search_term = params[:search_term]
-    @products = if @search_term.present?
-               Product.where("name ILIKE ?", "%#{@search_term}%")
-    else
-    Product.all
-    end
+    @category_id = params[:category_id]
+    @categories = Category.all
+  
+    @products = Product.all
+    @products = @products.where("name LIKE ?", "%#{@search_term}%") if @search_term.present?
+    @products = @products.where(category_id: @category_id) if @category_id.present?
   end
 
   def create
@@ -36,7 +38,7 @@ class Admin::ProductsController < ApplicationController
     end
   end
   def destroy
-    @category.destroy
+    @product.destroy
     flash[:notice]="Article is Deleted succesfully"
     redirect_to categories_path 
   end

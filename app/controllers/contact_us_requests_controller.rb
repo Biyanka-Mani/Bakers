@@ -26,7 +26,7 @@ class ContactUsRequestsController < ApplicationController
   
   
     def destroy
-      @category.destroy
+      @contact_us_request.destroy
       flash[:notice]="Message is Deleted succesfully"
       redirect_to contact_us_requests_path
   
@@ -37,7 +37,7 @@ class ContactUsRequestsController < ApplicationController
       def request_params
           params.require(:contact_us_request).permit(:customer_name,:customer_email,:message)
       end
-      def find_category
+      def find_enquiry
           @contact_us_request=ContactUsRequest.find(params[:id])
       end
       def require_admin

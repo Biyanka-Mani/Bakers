@@ -1,23 +1,42 @@
 <%= render 'shared/errors',obj:@contact_us_request%>
-<%= form_with model: @contact_us_request, local: true do |form| %>
-  
 
-  <div class="field">
-    <%= form.label :customer_name %>
-    <%= form.text_field :customer_name %>
-  </div>
-
-  <div class="field">
-    <%= form.label :customer_email %>
-    <%= form.email_field :customer_email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :message %>
-    <%= form.text_area :message %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit "Send Message" %>
-  </div>
-<% end %>
+<section class="py-5">
+	<div class="container-fluid p-lg-0">
+		<div class="row g-0 align-items-center">
+			<div class="col-lg-6">
+				<div class="col-lg-8 mx-auto">
+					<span class="text-muted">Let's Talk</span>
+					<h2 class="display-5 fw-bold">Contact Us</h2>
+					<p class="lead">Lorem ipsum dolor, sit amet elit Quamnitm veniam dicta, quos nemo minima nulla ducimus officii nulla ducimus officiis! Lorem ipsum dolor, sit amet elit Quamnitm.</p>
+					<%= form_with model: @contact_us_request, local: true do |form| %>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="mb-3">
+                   <%= form.text_field :customer_name ,class:"form-control bg-light",placeholder:"Your name"%>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="mb-3">
+									<%= form.text_field :customer_email ,class:"form-control bg-light",placeholder:"Your email"%>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="mb-3">
+									<%= form.text_area :message ,class:"form-control bg-light",placeholder:"Your message"%>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="d-grid">
+                  <%= form.submit "Send Message",class:"btn btn-primary" %>
+								</div>
+							</div>
+						</div>
+					<% end %>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="mt-5 mt-lg-0"><img alt="" class="img-fluid" src="https://freefrontend.dev/assets/map-img-3.png"></div>
+			</div>
+		</div>
+	</div>
+</section>

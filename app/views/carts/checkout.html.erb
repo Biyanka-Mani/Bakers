@@ -1,48 +1,82 @@
-<h1>Checkout</h1>
-
-<h2>Cart Information</h2>
-<% if @cart_items.present? && @cart_items.any? %>
-  <ul>
-    <% @cart_items.each do |item| %>
-      <% product = @product_lookup[item["product_id"].to_i] %>
-      <% if product %>
-        <li>
-          <%= product.name %> (ID: <%= product.id %>)
-          - Quantity: <%= item["quantity"] %>
-        </li>
-      <% else %>
-        <li>Product with ID <%= item["product_id"] %> not found.</li>
-      <% end %>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Your cart is empty.</p>
-<% end %>
-
-<h2>Billing Information</h2>
-<%= form_with(model: @order, url: place_order_path, local: true) do |form| %>
-  <div class="field">
-    <%= form.label :customer_name %>
-    <%= form.text_field :customer_name %>
+<div class="container mt-5">
+  <h1 class="mb-4">Checkout</h1>
+  
+  <%= form_with(model: @order, local: true, url: place_order_path, method: :post) do |f| %>
+    <div class="row">
+      <div class="col-md-6">
+        <h2>1. Billing Information</h2>
+        <div class="mb-3">
+          <%= f.label :customer_name, "Full Name", class: "form-label" %>
+          <%= f.text_field :customer_name, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :customer_email, "Email", class: "form-label" %>
+          <%= f.email_field :customer_email, class: "form-control", required: true %>
+        </div>
+        <div class="mb-3">
+          <%= f.label :customer_phone, "Phone Number", class: "form-label" %>
+          <%= f.telephone_field :customer_phone, class: "form-control", required: true %>
+        </div>
+      </div>
+      
+      <div class="col-md-6">
+        <h2>Order Summary</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Subtotal</th>
+             <th class="text-end"><%= number_to_currency(@total_amount) %></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tax</td>
+              <td class="text-end"><%= number_to_currency(@total_amount * 0.05) %></td>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <th class="text-end"><%= number_to_currency(@total_amount * 1.05) %></th>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h3>Payment Method</h3>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="payment_method" id="credit_card" checked>
+          <label class="form-check-label" for="credit_card">
+            Pay At Store
+          </label>
+        </div>
+        
+        <%= f.submit "Place Order", class: "btn btn-primary mt-3" %>
+      </div>
+    </div>
+  <% end %>
+  
+  <div class="mt-5">
+    <h2>2. Cart Information</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @cart_items.each do |item| %>
+          <% product = @product_lookup[item["product_id"].to_i] %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= number_to_currency(product.unit_price) %></td>
+            <td><%= item["quantity"] %></td>
+            <td><%= number_to_currency(product.unit_price * item["quantity"].to_i) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <%= link_to "Return to Shop", products_path, class: "btn btn-secondary" %>
   </div>
-
-  <div class="field">
-    <%= form.label :customer_email %>
-    <%= form.email_field :customer_email %>
-  </div>
-
-  <div class="field">
-    <%= form.label :customer_phone %>
-    <%= form.text_field :customer_phone %>
-  </div>
-
- 
-
-  <h2>Total Amount</h2>
-  <% total_amount = @cart_items.sum { |item| @product_lookup[item["product_id"].to_i].unit_price * item["quantity"] } %>
-  <p>Total: <%= number_to_currency(total_amount) %> (including GST)</p>
-
-  <div class="actions">
-    <%= form.submit "Place Order" %>
-  </div>
-<% end %>
+</div>

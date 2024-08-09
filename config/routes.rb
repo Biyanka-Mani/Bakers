@@ -1,15 +1,14 @@
 Rails.application.routes.draw do
 
   root 'home#index'
+  get '/aboutus', to: 'home#aboutus', as: 'aboutus'
   
   namespace :admin do
-    # get 'orders/index'
-    # get 'orders/show'
-    # get 'orders/update'
     root 'dashboard#index'
-    resources :users, only: [:new, :create]
+    resources :users, only: [:new, :create,:index,:destroy]
     resources :products
     resources :categories
+    resources :contact_us_requests,only:[:index,:show,:destroy]
     resources :orders, only: [:index, :show, :update] do
       member do
         patch :update_status
@@ -18,7 +17,11 @@ Rails.application.routes.draw do
   end
   resources :categories
   resources :products, only: [:index, :show]
-  resources :orders, only: [:new, :create, :show]
+  resources :orders, only: [:new, :create, :show] do
+    member do
+      get 'confirmation'
+    end
+  end
   resources :order_products
   resources :contact_us_requests
 
@@ -34,6 +37,8 @@ Rails.application.routes.draw do
   end
   get '/checkout', to: 'carts#checkout', as: 'checkout'
   post '/place_order', to: 'carts#place_order', as: 'place_order'
+  post 'cart/update', to: 'carts#update', as: 'update_cart'
+ post 'cart/remove', to: 'carts#remove', as: 'remove_from_cart'
 
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

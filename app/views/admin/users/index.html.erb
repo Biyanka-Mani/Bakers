@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="display-4">Bakers List</h1>
+  
+  
+   <%= link_to new_admin_user_path, class: "btn  custom-btn me-2" do %>
+                <i class="bi bi-eye-fill me-2"></i>Add New Baker
+    <% end %>
+</div>
+<table class="table align-middle my-5 bg-white table-striped">
+  <thead class="bg-light">
+    <tr class="p-5">
+      <th><div class="mx-1">User Id</div></th>
+      <th><div class="mx-3">Baker Name</div></th>
+      <th><div class="mx-3">Email Id</div></th>
+      <th><div class="mx-3">Baker Added Date</div></th>
+      <th><div class="mx-1">Actions</div></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+        <tr>
+            <td>
+               <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%= user.id %></p>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%= user.name %></p>
+                </div>
+            </td>
+             <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"> <%= user.email %></p>
+                </div>
+            </td>
+            <td>
+                <div class="ms-3">
+                    <p class="fw-lead mb-1"><%= user.created_at.strftime("%d-%m-%Y") %></p>
+                </div>
+            </td>
+            <td>
+             <div class="d-flex ">
+                <%= link_to admin_users_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link text-danger" do %>
+                <i class="bi bi-trash-fill"></i>
+                <% end %>
+                </div>
+            </td>
+        </tr>
+   <% end %> 
+  </tbody>
+</table>

@@ -1,24 +1,83 @@
-<p>
-  <strong>Name:</strong>
-  <%= @product.name %>
-</p>
+<div class="container mt-4">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">Category</li>
+      <li class="breadcrumb-item">Dessert</li>
+      <li class="breadcrumb-item active" aria-current="page"><%= @product.name %></li>
+    </ol>
+  </nav>
 
-<p>
-  <strong>Description:</strong>
-  <%= @product.description %>
-</p>
+  <!-- Main Row -->
+  <div class="row">
+    <!-- Product Images -->
+    <div class="col-md-5">
+      <div class="card">
+        <%= image_tag @product.images.first, class: "card-img-top", alt: @product.name %>
+        <div class="row mt-2">
+          <% @product.images.each do |image| %>
+            <div class="col-3">
+              <%= image_tag image, class: "img-thumbnail" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-<p>
-  <strong>Images:</strong>
-  <% @product.images.each do |image| %>
-    <%= image_tag image %>
-  <% end %>
-</p>
-<%= form_with url:add_to_cart_cart_path, method: :post, local: true do |form| %>
-  <%= form.hidden_field :product_id, value: @product.id %>
-  <div class="field">
-    <%= form.label :quantity %>
-    <%= form.number_field :quantity, value: 1, min: 1 %>
+    <!-- Product Details -->
+    <div class="col-md-7">
+      <h2><%= @product.name %></h2>
+      <p class="text-muted">$<%= @product.unit_price %> 
+        <span class="badge <%= @product.stock_quantity > 0 ? 'bg-success' : 'bg-danger' %>">
+          <%= @product.stock_quantity > 0 ? 'In Stock' : 'Out of Stock' %>
+        </span>
+      </p>
+      <hr>
+      <p><strong>Category:</strong> <%= @product.category.name %></p>
+      
+      <p><%= @product.description %></p>
+      
+      <hr>
+        <!-- WhatsApp Share Section -->
+    <div class="d-flex justify-content-end align-items-center">
+      <%= link_to "https://wa.me/?text=#{ERB::Util.url_encode('Check out this product: ' + product_url(@product))}", target: "_blank", class: "text-decoration-none text-success d-flex align-items-center" do %>
+        <i class="bi bi-whatsapp fs-4"></i> <!-- WhatsApp icon using Bootstrap Icons -->
+        <span class="ms-2">Share Item</span>
+      <% end %>
+    </div>
+     <% if @product.in_stock? %> 
+        <%= form_with url:add_to_cart_cart_path, method: :post, local: true,class:"d-flex align-items-left" do |form| %>
+          <%= form.hidden_field :product_id, value: @product.id %>
+          <div class="field">
+            <%= form.label :quantity %>
+            <%= form.number_field :quantity, value: 1, min: 1 ,class:"mx-3", max: @product.stock_quantity %>
+          </div>
+          <%= form.submit 'Add to Cart',class:"btn btn-warning mx-2" %>
+          <% end %>
+      <% else %>
+          <p class="text-danger">Out of Stock</p>
+          <%= button_tag "Add to Cart", class: "btn btn-warning mx-2", disabled: true %>
+      <% end %>
+
+      <ul class="nav nav-tabs mt-4" id="productDetailsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="ingredients-tab" data-bs-toggle="tab" href="#ingredients" role="tab">Ingredients</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="storage-tab" data-bs-toggle="tab" href="#storage" role="tab">Storage Instructions</a>
+        </li>
+      </ul>
+      <div class="tab-content mt-3">
+        <%= render 'ingredients' %>
+        <%= render 'storage' %>
+      </div>
+    </div>
   </div>
-  <%= form.submit 'Add to Cart' %>
-<% end %>
+</div>
+
+
+
+
+
+
+

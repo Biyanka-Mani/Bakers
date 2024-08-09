@@ -23,17 +23,24 @@
         Categories
         <% end %>
     </li>
-      <li>
-         <%= link_to admin_products_path, class: "nav-link" do %>
+      <li class="<%= 'active' if current_page?(admin_products_path) %>">
+         <%= link_to admin_products_path, class: "nav-link #{'active' if current_page?(admin_products_path)}"   do %>
 			<i class="bi bi-pen me-1"></i>
             Products
 		<% end %>
       </li>
-      <li>
-         <%= link_to root_path, class: "nav-link" do %>
-			<i class="bi bi-question me-1"></i>
-            Enquiries
-		<% end %>
+
+      <li class="<%= 'active' if current_page?(admin_contact_us_requests_path) %>">
+        <%= link_to admin_contact_us_requests_path, class: "nav-link #{'active' if current_page?(admin_contact_us_requests_path)}" do %>
+      <i class="bi bi-question me-1"></i>
+        Enquiries
+      <% end %>
+      </li>
+        <li class="<%= 'active' if current_page?(admin_users_path) %>">
+        <%= link_to admin_users_path, class: "nav-link #{'active' if current_page?(admin_users_path)}" do %>
+      <i class="bi bi-question me-1"></i>
+        Bakers Mangement
+      <% end %>
       </li>
     </ul>
     <hr>
@@ -43,11 +50,10 @@
         <strong>mdo</strong>
       </a>
       <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item" href="#">New project...</a></li>
-        <li><a class="dropdown-item" href="#">Settings</a></li>
         <li><a class="dropdown-item" href="#">Profile</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Sign out</a></li>
+         <%= link_to 'Logout', destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "dropdown-item" %>
+        
       </ul>
     </div>
   </div>

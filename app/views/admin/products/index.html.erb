@@ -1,22 +1,33 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1 class="display-4">Products</h1>
-  <!-- Button trigger modal -->
+  
   
    <%= link_to new_admin_product_path, class: "btn  custom-btn me-2" do %>
                 <i class="bi bi-eye-fill me-2"></i>Add New Product
     <% end %>
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <%= form_with(url: admin_products_path, method: :get, local: true, class: "form-inline") do |form| %>
-    <div class="input-group">
-      <%= form.text_field :search_term, class: "form-control", placeholder: "Search products..." %>
-      <div class="input-group-append">
-        <%= form.submit "Search", class: "btn btn-primary" %>
+<div class="row align-items-center mb-4">
+  <div class="col-auto">
+    <%= form_with(url: admin_products_path, method: :get, local: true, class: "form-inline") do |form| %>
+      <div class="input-group">
+        <%= form.select :category_id, options_for_select([["All Categories", ""]] + @categories.map { |c| [c.name, c.id] }, @category_id), {}, class: "form-control" %>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
+  <div class="col">
+    <%= form_with(url: admin_products_path, method: :get, local: true, class: "form-inline") do |form| %>
+      <div class="input-group">
+        <%= form.text_field :search_term, class: "form-control", placeholder: "Search products..." %>
+        <div class="input-group-append mx-4">
+          <%= form.submit "Search", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
+
+
 
 
 
