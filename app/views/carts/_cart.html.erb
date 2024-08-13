@@ -1,5 +1,7 @@
+
 <% if session[:cart].present? %>
   <ul class="list-group">
+    <div id="cart-message" style="display: none;"> </div>
     <% session[:cart].each do |item| %>
       <% product = Product.find(item["product_id"]) %>
       <li class="list-group-item d-flex justify-content-between align-items-center my-3">
@@ -10,25 +12,28 @@
           <div class="ms-3">
             <!-- Product Name and Quantity -->
             <h6><%= product.name %></h6>
-            <%= form_with(url: update_cart_path, method: :post, local: true) do |f| %>
+            <%= form_with(url: update_cart_path, method: :post, local: true,data: { turbo: false }) do |f| %>
               <%= hidden_field_tag :product_id, product.id %>
               
               <div class="input-group">
                 <%= f.number_field :quantity, value: item["quantity"], 
-                           min: 1, max: product.stock_quantity, 
+                           min: 1,max: [10, product.stock_quantity].min, 
                            class: 'form-control' %>
                   <%= f.submit "Update", class: "btn btn-sm btn-secondary" %>
                 <% end %>
                 </div>
-            <form action="<%= remove_from_cart_path %>" method="post" class="d-inline ms-2">
-              <%= hidden_field_tag :product_id, product.id %>
-              <button type="submit" class="btn btn-outline-danger">
-                <i class="bi bi-trash"></i> <!-- Bin icon from Bootstrap Icons -->
-              </button>
-            </form>
+              <%= form_with(url: remove_from_cart_path, method: :post, local: true,data: { turbo: false }) do |f| %>
+                    
+                      <%= hidden_field_tag :product_id, product.id %>
+                      <%= button_tag(type: 'submit', class: 'btn btn-outline-danger') do %>
+                    <i class="bi bi-trash"></i>
+               <% end %>
+             
+              
+             <% end %>
           </div>
         </div>
-        <span class="badge bg-primary rounded-pill"><%= number_to_currency(product.unit_price * item["quantity"].to_i) %></span>
+        <span class="badge bg-primary rounded-pill"><%= number_to_currency(product.unit_price) %></span>
       </li>
     <% end %>
   </ul>
@@ -48,4 +53,3 @@
 <% else %>
   <p>Your cart is empty.</p>
 <% end %>
-

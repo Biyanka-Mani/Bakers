@@ -1,63 +1,71 @@
-<div class="container">
-  <div class="mx-auto">
-    <div class="row justify-content-center mt-3">
-      <div class="col-10">
-        <%= render 'shared/errors', obj: @product %>
-      <%= form_with(model: [:admin, @product], class: "container shadow p-3 mb-3 bg-black rounded", local: true,html: { multipart: true } )do |f| %>
+
+ <%= render 'shared/errors', obj: @product %>
+      <%= form_with(model: [:admin, @product], class: "container shadow p-3 ", local: true,html: { multipart: true } )do |f| %>
           <!-- Name Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :name, "Name Of Product", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :name, "Name Of Product", class: "col-2 col-form-label" %>
               <%= f.text_field :name, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter name" %>
-            </div>
+               <% @product.errors.full_messages_for(:name).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+              <% end %>
           </div>
           
           <!-- Description Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :description, "Description", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :description, "Description", class: "col-2 col-form-label " %>
               <%= f.text_area :description, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter description" %>
-            </div>
+             <% @product.errors.full_messages_for(:description).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+              <% end %>
           </div>
           
           <!-- Category Dropdown -->
-          <div class="form-group row mt-3">
-            <%= f.label :category_id, "Category", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :category_id, "Category", class: "col-2 col-form-label " %>
               <%= f.collection_select :category_id, Category.all, :id, :name, { prompt: "Select a Category" }, class: "form-control shadow p-2 bg-body-tertiary rounded" %>
-            </div>
+            <% @product.errors.full_messages_for(:category_id).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+              <% end %>
           </div>
+          <% if @product.persisted? %>
           <% @product.images.each do |image| %>
-            <%= form.hidden_field :images, multiple: true, value: image.signed_id %>
+            <%= f.hidden_field :images, multiple: true, value: image.signed_id %>
           <% end %>
+             <% end %>
           <!-- Images Upload Field -->
-          <div class="form-group mb-3">
-            <%= f.label :images, "Images", class: "form-label text-white" %>
+          <div class="mt-3">
+          <%= f.label :images, "Images", class: "col-2 col-form-label" %>
             <%= f.file_field :images, multiple: true, class: "form-control" %>
-          </div>
-          
+            <% @product.errors.full_messages_for(:images).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+            <% end %>
+        </div>
+           
           <!-- Other Fields -->
           <!-- Add other fields like unit_price, stock_quantity, etc. similarly -->
 
         <!-- Unit Price Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :unit_price, "Unit Price", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :unit_price, "Unit Price", class: "col-2 col-form-label " %>
               <%= f.number_field :unit_price, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter unit price" %>
-            </div>
+            <% @product.errors.full_messages_for(:unit_price).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+            <% end %>
           </div>
           
           <!-- Stock Quantity Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :stock_quantity, "Stock Quantity", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :stock_quantity, "Stock Quantity", class: "col-2 col-form-label " %>
+           
               <%= f.number_field :stock_quantity, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter stock quantity" %>
-            </div>
+             <% @product.errors.full_messages_for(:stock_quantity).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+            <% end %>
           </div>
           
         <!-- Is Vegetarian Field -->
           <div class="form-group row mt-3">
-            <%= f.label :is_vegetarian, "Is Vegetarian", class: "col-2 col-form-label text-white" %>
+            <%= f.label :is_vegetarian, "Is Vegetarian", class: "col-2 col-form-label" %>
             <div class="col-10">
               <div class="form-check form-check-inline">
                 <%= f.radio_button :is_vegetarian, true, class: "form-check-input", id: "vegetarian_true" %>
@@ -71,31 +79,37 @@
           </div>
 
            <!-- Ingredients Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :ingredients, "Ingredients", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :ingredients, "Ingredients", class: "col-2 col-form-label " %>
+           
               <%= f.text_area :ingredients, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter ingredients" %>
-            </div>
+              <% @product.errors.full_messages_for(:ingredients).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+            <% end %>
           </div>
           
           <!-- Storage Instructions Field -->
-          <div class="form-group row mt-3">
-            <%= f.label :storage_instructions, "Storage Instructions", class: "col-2 col-form-label text-white" %>
-            <div class="col-10">
+          <div class="mt-3">
+            <%= f.label :storage_instructions, "Storage Instructions", class: "col-2 col-form-label " %>
+            
               <%= f.text_area :storage_instructions, class: "form-control shadow p-2 bg-body-tertiary rounded", placeholder: "Enter storage instructions" %>
-            </div>
+            <% @product.errors.full_messages_for(:storage_instructions).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+            <% end %>
           </div>
-          
+          <div class="mt-3">
+            <%= f.label :active %>
+            <%= f.hidden_field :active, value: false %>
+            <%= f.check_box :active %>
+            </div>
           <!-- Submit Button -->
           <div class="form-group text-center mt-5">
-            <%= f.submit "Submit", class: "btn btn-outline-dark btn-lg my-6 text-white" %>
+            <%= f.submit "Submit", class: "btn btn-outline-dark btn-lg my-6 " %>
           </div> 
         <% end %>
-      </div>
+     
       
       <div class="mb-3">
-        <%= link_to '[Cancel and Return Back To Products Listing]', products_path, class: "row justify-content-center mt-4 text-black" %>
+        <%= link_to '[Cancel and Return Back To Products Listing]', admin_products_path, class: "row justify-content-center mt-4 text-black" %>
       </div>
-    </div>
-  </div>
-</div>
+

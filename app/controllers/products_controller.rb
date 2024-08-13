@@ -1,7 +1,8 @@
 class ProductsController < ApplicationController
+  before_action :set_product, only: [:show]
   def index
     @categories = Category.all
-    @products = Product.all
+    @products = Product.where(active:true)
 
     # Filtering by category
     if params[:category].present? && params[:category] != 'all'
@@ -22,8 +23,21 @@ class ProductsController < ApplicationController
 
   def show
     # @products=@category.products
-    @product=Product.find(params[:id])
+   
+    if @product.active?
+    else
+      flash[:alert] = "This product is inactive currently."
+      redirect_to products_path
+    end
   end
+  def set_product
+    @product = Product.find_by(id: params[:id])
+    if @product.nil?
+      flash[:alert] = "Product not found."
+      redirect_to products_path
+    end
+  end
+  
 
     
 end

@@ -1,7 +1,7 @@
 <div class="d-flex flex-column flex-shrink-0 p-3 bg-light sidenav" style="width: 280px; height:100vh">
     <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
       <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-      <span class="fs-4">Sidebar</span>
+      <span class="fs-4">Bakers</span>
     </a>
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
@@ -36,22 +36,39 @@
         Enquiries
       <% end %>
       </li>
+        <% if current_user&.is_admin? %>
         <li class="<%= 'active' if current_page?(admin_users_path) %>">
         <%= link_to admin_users_path, class: "nav-link #{'active' if current_page?(admin_users_path)}" do %>
-      <i class="bi bi-question me-1"></i>
+      <i class="bi bi-people me-1"></i></i>
         Bakers Mangement
+      <% end %>
+      </li>
+       <li class="<%= 'active' if current_page?(edit_admin_contact_info_path) %>">
+        <%= link_to edit_admin_contact_info_path, class: "nav-link #{'active' if current_page?(edit_admin_contact_info_path)}" do %>
+      <i class="bi bi-credit-card me-1"></i>
+        Contact Info Edit
+      <% end %>
+      </li>
+      <li class="<%= 'active' if current_page?(edit_admin_content_management_path) %>">
+        <%= link_to edit_admin_content_management_path, class: "nav-link #{'active' if current_page?(edit_admin_content_management_path)}" do %>
+      <i class="bi bi-pencil-square me-1"></i>
+        Content Edit
+      <% end %>
       <% end %>
       </li>
     </ul>
     <hr>
     <div class="dropdown">
       <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-        <strong>mdo</strong>
+    <span class="bi bi-person-circle me-2" style="font-size: 32px;"></span>
+      
+        <strong><% if current_user %>
+              <strong><%= current_user.name %></strong>
+            <% else %>
+              <p>Please log in to see your name.</p>
+            <% end %></strong>
       </a>
       <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item" href="#">Profile</a></li>
-        <li><hr class="dropdown-divider"></li>
          <%= link_to 'Logout', destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" }, class: "dropdown-item" %>
         
       </ul>

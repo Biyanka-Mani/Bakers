@@ -41,9 +41,10 @@
             </td>
             <td>
              <div class="d-flex ">
-                <%= link_to admin_users_path(user), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link text-danger" do %>
-                <i class="bi bi-trash-fill"></i>
-                <% end %>
+             <%= link_to admin_user_path(user), data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, class: "btn btn-link text-danger" do %>
+  <i class="bi bi-trash-fill"></i>
+<% end %>
+
                 </div>
             </td>
         </tr>

@@ -59,7 +59,7 @@
               <%= product.name %>
             </td>
             <td><%= product.id %></td>
-            <td><%= product.category.name %></td>
+            <td>   <%= product.category.present? ? product.category.name : "No Category" %></td>
             <td><%= product.stock_quantity %></td>
             <td><%= number_to_currency(product.unit_price) %></td>
             <td>

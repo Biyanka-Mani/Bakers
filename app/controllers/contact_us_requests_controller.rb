@@ -14,12 +14,12 @@ class ContactUsRequestsController < ApplicationController
     end
   
     def create
-      @request=ContactUsRequest.create(request_params)
-      if @request.save
+      @contact_us_request=ContactUsRequest.new(request_params)
+      if @contact_us_request.save
           flash[:notice]="Message Created Successfully"
           render :new,status: :unprocessable_entity
       else
-          flash.now[:alert]="Message Creation Error Occured"
+          flash[:alert]="Message Creation Error Occured"
           render :new,status: :unprocessable_entity
       end
     end

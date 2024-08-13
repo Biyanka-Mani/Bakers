@@ -3,7 +3,7 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">Category</li>
-      <li class="breadcrumb-item">Dessert</li>
+      <li class="breadcrumb-item"> <%= @product.category.present? ? @product.category.name : "No Category" %></li>
       <li class="breadcrumb-item active" aria-current="page"><%= @product.name %></li>
     </ol>
   </nav>
@@ -12,17 +12,32 @@
   <div class="row">
     <!-- Product Images -->
     <div class="col-md-5">
-      <div class="card">
-        <%= image_tag @product.images.first, class: "card-img-top", alt: @product.name %>
-        <div class="row mt-2">
-          <% @product.images.each do |image| %>
-            <div class="col-3">
-              <%= image_tag image, class: "img-thumbnail" %>
-            </div>
-          <% end %>
+  <div class="card">
+    <% if @product.images.attached? %>
+      <%= image_tag @product.images.first, class: "card-img-top", alt: @product.name %>
+    <% else %>
+      <%= image_tag "placeholder.jpg", class: "card-img-top", alt: "No Image Available" %>
+    <% end %>
+    <div class="row mt-2">
+      <% @product.images.each do |image| %>
+        <div class="col-3">
+          <%= image_tag image, class: "img-thumbnail", data: { toggle: "modal", target: "#imageModal", image: url_for(image) } %>
         </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <%= image_tag "", id: "modalImage", class: "img-fluid" %>
       </div>
     </div>
+  </div>
+</div>
 
     <!-- Product Details -->
     <div class="col-md-7">
@@ -33,7 +48,7 @@
         </span>
       </p>
       <hr>
-      <p><strong>Category:</strong> <%= @product.category.name %></p>
+      <p><strong>Category:</strong>  <%= @product.category.present? ? @product.category.name : "No Category" %></p>
       
       <p><%= @product.description %></p>
       
@@ -41,7 +56,7 @@
         <!-- WhatsApp Share Section -->
     <div class="d-flex justify-content-end align-items-center">
       <%= link_to "https://wa.me/?text=#{ERB::Util.url_encode('Check out this product: ' + product_url(@product))}", target: "_blank", class: "text-decoration-none text-success d-flex align-items-center" do %>
-        <i class="bi bi-whatsapp fs-4"></i> <!-- WhatsApp icon using Bootstrap Icons -->
+        <i class="bi bi-whatsapp fs-4"></i> 
         <span class="ms-2">Share Item</span>
       <% end %>
     </div>
@@ -50,7 +65,7 @@
           <%= form.hidden_field :product_id, value: @product.id %>
           <div class="field">
             <%= form.label :quantity %>
-            <%= form.number_field :quantity, value: 1, min: 1 ,class:"mx-3", max: @product.stock_quantity %>
+            <%= form.number_field :quantity, value: 1, min: 1 ,class:"mx-3",max: [10, @product.stock_quantity].min %>
           </div>
           <%= form.submit 'Add to Cart',class:"btn btn-warning mx-2" %>
           <% end %>
@@ -75,7 +90,21 @@
   </div>
 </div>
 
+<%= javascript_include_tag 'https://code.jquery.com/jquery-3.6.0.min.js' %>
+<%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js' %>
+<%= javascript_include_tag 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js' %>
 
+<script>
+  document.addEventListener("turbo:load",()=>{
+    $('#imageModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var imageUrl = button.data('image'); // Extract info from data-* attributes
+      var modal = $(this);
+      modal.find('#modalImage').attr('src', imageUrl);
+    });
+  });
+
+</script>
 
 
 

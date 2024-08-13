@@ -1,5 +1,6 @@
 # app/controllers/carts_controller.rb
 class CartsController < ApplicationController
+  include CartHelper
   def add_to_cart
     product = Product.find(params[:product_id])
     quantity = params[:quantity].to_i
@@ -30,7 +31,7 @@ class CartsController < ApplicationController
     end
 
     flash[:notice] = "Product added to cart successfully."
-    redirect_to cart_path
+    redirect_back(fallback_location: root_path)
   end
 
   def show
@@ -38,7 +39,7 @@ class CartsController < ApplicationController
     product_ids = @cart_items.map { |item| item["product_id"].to_i }
     @products = Product.where(id: product_ids)
     @product_lookup = @products.index_by(&:id)
-    debugger
+  
   end
 
 
@@ -50,26 +51,40 @@ class CartsController < ApplicationController
     item = session[:cart].find { |item| item["product_id"] == product_id }
     if item
       item["quantity"] = quantity
+      message = "Cart updated successfully"
+      success = true
+    else
+      message = "Item not found in cart"
+      success = false
     end
-
-    redirect_to cart_path
+    subtotal = calculate_subtotal(session[:cart])
+    respond_to do |format|
+      format.html { redirect_to product_path(product_id), notice: message }
+      format.json { render json: { success: success, message: message, subtotal: subtotal } }
+    end
   end
 
   def remove
     product_id = params[:product_id]
 
     # Remove the item from the cart
-    session[:cart].reject! { |item| item["product_id"] == product_id }
+    
+    if session[:cart].reject! { |item| item["product_id"] == product_id }
+      
+      message = "Item Removed From Cart"
+      success = true
+    else
+      message = "Item not found in cart"
+      success = false
+    end
 
-    redirect_to cart_path
+    calculate_subtotal(session[:cart])
+    respond_to do |format|
+      format.html { redirect_to product_path(product_id), notice: message }
+      format.json { render json: { success: success, message: message } }
+    end
   end
   def checkout
-    # @order = Order.new
-    # @order.order_products_attributes = session[:cart].map do |item|
-    #   {
-    #     product_id: item["product_id"],
-    #     quantity: item["quantity"]
-    #   }
     @cart_items = session[:cart] || []
     product_ids = @cart_items.map { |item| item["product_id"].to_i }
     @products = Product.where(id: product_ids)
@@ -82,6 +97,7 @@ class CartsController < ApplicationController
     @order = Order.new(order_params)
     @order.order_status = :confirmed
     @order.total_amount = calculate_total_amount
+    @total_amount=@order.total_amount
     order_saved = false
   
     ActiveRecord::Base.transaction do
@@ -89,7 +105,8 @@ class CartsController < ApplicationController
       if order_saved
         session[:cart].each do |item|
           product = Product.find(item["product_id"])
-          debugger
+          
+         
           if product.stock_quantity >= item["quantity"]
             @order.order_products.create!(product_id: item["product_id"], quantity: item["quantity"],price:product.unit_price)
             product.update!(stock_quantity: product.stock_quantity - item["quantity"])
@@ -105,10 +122,13 @@ class CartsController < ApplicationController
     if order_saved && @order.errors.empty?
       OrderMailer.with(order: @order).new_order_email.deliver_later
       session[:cart] = []
+      session[:order_id] = @order.id
       redirect_to  confirmation_order_path(@order), notice: 'Your order has been placed successfully!'
     else
       @order.destroy if order_saved
-      render :checkout, alert: 'Your order has been placed successfully!'
+      @cart_items = session[:cart] # Assuming session[:cart] has your cart items
+      @product_lookup = Product.where(id: @cart_items.map { |item| item["product_id"] }).index_by(&:id)
+      render :checkout,status: :unprocessable_entity
     end
   end
 

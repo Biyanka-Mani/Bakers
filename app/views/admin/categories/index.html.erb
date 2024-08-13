@@ -44,6 +44,7 @@
 </table>
 
 
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -52,32 +53,21 @@
         <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      
-         <%= form_with(model: [:admin,@category],class:"modal-body",local: true) do |f| %>
-            <div class="mb-3">
-                
-                 <%= f.label :name,"Name Of Category",class:"form-label"%>
-                  <%= f.text_field :name,class:"form-control shadow p-2 bg-body-tertiary rounded",placeholder:"Enter name" %>
-            </div>
-            <div class="mb-3">
-                 <%= f.label :categoryimage,"Image", class:"form-label" %>
-                <%= f.file_field :categoryimage, class: "form-control", type:"file", id:"formFile"%>
-            </div>
-     
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <%= f.submit "Save", class: "btn btn-primary" %>
+      <div class="modal-body">
+        <%= turbo_frame_tag "category_form_modal" do %>
+          <%= render 'form'%>
+        <% end %>
       </div>
-       <% end %>
     </div>
   </div>
 </div>
-<script>
-var myModal = document.getElementById('myModal')
-var myInput = document.getElementById('myInput')
 
-myModal.addEventListener('shown.bs.modal', function () {
-  myInput.focus()
-})
+<script>
+document.addEventListener("turbo:submit-end", function(event) {
+  if (event.detail.success === false) {
+    var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+    modal.show();
+  }
+});
 </script>
 

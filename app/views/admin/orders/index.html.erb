@@ -2,6 +2,16 @@
   <h1 class="display-4">Orders </h1>
  
 </div>
+<div class="col">
+    <%= form_with(url: admin_orders_path, method: :get, local: true, class: "form-inline") do |form| %>
+      <div class="input-group">
+        <%= form.text_field :search_term, class: "form-control", placeholder: "Search customer phone." %>
+        <div class="input-group-append mx-4">
+          <%= form.submit "Search", class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 <%= form_with(url: admin_orders_path, method: :get, local: true, class: 'mb-4') do %>
   <div class="row">
     <div class="col-md-3">

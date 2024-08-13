@@ -1,6 +1,7 @@
 class Admin::ContactUsRequestsController < ApplicationController
   before_action :find_enquiry,only: [:show,:destroy]
-  
+  before_action :authenticate_user!
+  before_action :require_admin,only:[:destroy]
   def index
     @contact_us_requests=ContactUsRequest.all
   end
@@ -28,7 +29,7 @@ class Admin::ContactUsRequestsController < ApplicationController
     def require_admin
       unless current_user.is_admin?
         flash[:alert] = "Only admins can perform that action"
-        redirect_to categories_path
+        redirect_to admin_root_path
       end 
     end
 

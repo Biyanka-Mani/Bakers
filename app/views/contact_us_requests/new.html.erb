@@ -1,42 +1,66 @@
-<%= render 'shared/errors',obj:@contact_us_request%>
-
 <section class="py-5">
-	<div class="container-fluid p-lg-0">
-		<div class="row g-0 align-items-center">
-			<div class="col-lg-6">
-				<div class="col-lg-8 mx-auto">
-					<span class="text-muted">Let's Talk</span>
-					<h2 class="display-5 fw-bold">Contact Us</h2>
-					<p class="lead">Lorem ipsum dolor, sit amet elit Quamnitm veniam dicta, quos nemo minima nulla ducimus officii nulla ducimus officiis! Lorem ipsum dolor, sit amet elit Quamnitm.</p>
-					<%= form_with model: @contact_us_request, local: true do |form| %>
-						<div class="row">
-							<div class="col-md-12">
-								<div class="mb-3">
-                   <%= form.text_field :customer_name ,class:"form-control bg-light",placeholder:"Your name"%>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="mb-3">
-									<%= form.text_field :customer_email ,class:"form-control bg-light",placeholder:"Your email"%>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="mb-3">
-									<%= form.text_area :message ,class:"form-control bg-light",placeholder:"Your message"%>
-								</div>
-							</div>
-							<div class="col-md-5">
-								<div class="d-grid">
-                  <%= form.submit "Send Message",class:"btn btn-primary" %>
-								</div>
-							</div>
-						</div>
-					<% end %>
-				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="mt-5 mt-lg-0"><img alt="" class="img-fluid" src="https://freefrontend.dev/assets/map-img-3.png"></div>
-			</div>
-		</div>
-	</div>
+  <div class="container-fluid p-lg-0">
+    <div class="row g-0 align-items-stretch">
+      <div class="col-lg-6">
+        <div class="col-lg-8 mx-auto">
+          <span class="text-muted">Let's Talk</span>
+          <h2 class="display-5 fw-bold">Contact Us</h2>
+
+
+          <%= form_with model: @contact_us_request, local: true,class:"py-5" do |form| %>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <%= form.text_field :customer_name, class: "form-control bg-light", placeholder: "Your name" %>
+                  <% @contact_us_request.errors.full_messages_for(:customer_name).each do |message| %>
+                    <div><%= message %></div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <%= form.text_field :customer_email, class: "form-control bg-light", placeholder: "Your email" %>
+                  <% @contact_us_request.errors.full_messages_for(:customer_email).each do |message| %>
+                    <div><%= message %></div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="mb-3">
+                  <%= form.text_area :message, class: "form-control bg-light", placeholder: "Your message" %>
+                  <% @contact_us_request.errors.full_messages_for(:message).each do |message| %>
+                    <div><%= message %></div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="d-grid">
+                  <%= form.submit "Send Message", class: "btn btn-primary" %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-lg-6 d-flex flex-column">
+        <div class="contact-info">
+          <h2 class="text-center">Contact Information</h2>
+          <% if contact_info %>
+            <p><strong>Phone:</strong> <%= contact_info.phone %></p>
+            <p><strong>Email:</strong> <%= contact_info.email %></p>
+            <p><strong>Address:</strong> <%= contact_info.address %></p>
+            <p><strong>Website:</strong> <%= contact_info.website %></p>
+            <p><strong>Store Timings:</strong> <%= contact_info.store_timings %></p>
+          <% end %>
+        </div>
+        <div class="text-center">
+          <h6>Visit Our store</h6>
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15781.294275983635!2d76.88236133227315!3d8.56485267438123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b05befac1f96425%3A0xc0007bf5f6dd1d4a!2sRoyal%20Bakers!5e0!3m2!1sen!2sin!4v1723544267219!5m2!1sen!2sin" width="300" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
+
+
+

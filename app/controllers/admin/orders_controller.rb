@@ -1,9 +1,12 @@
 class Admin::OrdersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_order, only: [:show, :update,:update_status]
   def index
+    @search_term = params[:search_term]
     @orders = Order.paginate(page: params[:page], per_page: 10)
+   
+    @orders = @orders.where("customer_phone LIKE ?", "%#{@search_term}%") if @search_term.present?
 
-  
     # Filter by order status
     if params[:order_status].present?
       @orders = @orders.where(order_status: params[:order_status])

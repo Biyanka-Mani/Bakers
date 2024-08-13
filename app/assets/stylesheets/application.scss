@@ -16,6 +16,14 @@
  */
  @import "bootstrap";
  @import "font-awesome";
+html,
+body {
+  height: 100%;
+}
+
+#page-content {
+  flex: 1 0 auto;
+}
  .sidenav {
     height: 100vh;
     position: fixed;
@@ -31,6 +39,16 @@
     background-color: #344575; /* Green */
     color: white; /* Text color */
     border: none;
+  }
+  .category-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .category-image:hover {
+    transform: scale(1.05);
   }
  
   

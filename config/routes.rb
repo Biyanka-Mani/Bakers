@@ -4,10 +4,16 @@ Rails.application.routes.draw do
   get '/aboutus', to: 'home#aboutus', as: 'aboutus'
   
   namespace :admin do
+    get 'content_managements/edit'
+    get 'content_managements/update'
+    get 'contact_infos/edit'
+    get 'contact_infos/update'
     root 'dashboard#index'
     resources :users, only: [:new, :create,:index,:destroy]
     resources :products
     resources :categories
+    resource :contact_info, only: [:edit, :update]
+    resource :content_management, only: [:edit, :update]
     resources :contact_us_requests,only:[:index,:show,:destroy]
     resources :orders, only: [:index, :show, :update] do
       member do

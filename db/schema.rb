@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_08_081817) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_12_131506) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -45,10 +45,35 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_081817) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "contact_infos", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "phone"
+    t.string "email"
+    t.text "address"
+    t.string "website"
+    t.string "store_timings"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "contact_us_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "customer_name"
     t.string "customer_email"
     t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "content_managements", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "home_page_category_header"
+    t.text "home_page_category_description"
+    t.string "home_page_baking_header"
+    t.text "home_page_baking_description"
+    t.string "baking_image"
+    t.string "about_us_header"
+    t.text "about_us_story"
+    t.string "master_baker_header"
+    t.text "master_baker_description"
+    t.string "master_baker_image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -92,6 +117,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_081817) do
     t.text "ingredients"
     t.integer "user_id"
     t.text "storage_instructions"
+    t.boolean "active", default: true
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

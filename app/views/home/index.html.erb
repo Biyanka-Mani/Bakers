@@ -1,0 +1,94 @@
+<div id="featuredProductsCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <% @featured_products.each_with_index do |product, index| %>
+      <div class="carousel-item <%= 'active' if index.zero? %>">
+        <div class="container-fluid">
+          <div class="row hero-section bg-light py-5">
+            
+            <div class="col-md-6 d-flex flex-column align-items-end">
+              <h1 class="display-4 text-warning fw-bold mb-3"><%= product.name %></h1>
+              
+              <p class="lead mb-4"><%= product.description %></p>
+              <%= button_to "Order Now", product_path(product) , method: :get, class: "btn btn-warning btn-lg shadow" %>
+            </div>
+            <div class="col-md-6 d-flex align-items-center justify-content-center">
+              <%= image_tag product.images.first, alt: product.name, class: 'img-fluid rounded shadow-lg', style: 'max-height: 400px;' if product.images.any? %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#featuredProductsCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div class="container p-5">
+  <div class="d-flex align-items-center justify-content-between">
+    <div class="me-4" style="max-width: 300px;">
+      <h2 class="mb-3 text-end"><%=@content_management.home_page_category_header%></h2>
+    </div>
+    <div class="vr mx-4" style="height: 100px; border-left: 2px solid #000;"></div>
+    <div class="flex-grow-1 position-relative">
+      <p class="mb-4">
+        <%=@content_management.home_page_category_description%>
+      </p>
+    </div>
+  </div>
+</div>
+
+  <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <% @categories.each_slice(4).with_index do |category_group, index| %>
+      <div class="carousel-item <%= 'active' if index == 0 %>">
+        <div class="row row-cols-2 row-cols-md-4 g-4 justify-content-center">
+          <% category_group.each do |category| %>
+            <div class="col text-center">
+              <%= link_to products_path(category: category.id), class: "text-decoration-none" do %>
+                <div class="mb-3">
+                  <%= image_tag category.categoryimage, class: "rounded-circle img-fluid", style: "width: 150px; height: 150px; object-fit: cover;", alt: category.name %>
+                </div>
+                <h5 class="text-dark"><%= category.name %></h5>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+
+<div class="container my-5">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="fw-bold"><%=@content_management.home_page_baking_header%></h2>
+      <%# <h3 class="fw-bold">Fresh From the oven</h3> %>
+     <p class="mt-4">
+       <%=@content_management.home_page_baking_description%>
+
+      </p>
+  <%= link_to  aboutus_path, class: 'btn btn-link text-decoration-none' do %>
+  Read More <i class="bi bi-arrow-right"></i></i>
+    <% end %>
+    </div>
+    <div class="col-md-6">
+      <%= image_tag @content_management.baking_image, alt: 'Baking', class: 'img-fluid rounded' %>
+    </div>
+  </div>
+</div>
+
+

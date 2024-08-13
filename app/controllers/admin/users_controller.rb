@@ -1,4 +1,5 @@
 class Admin::UsersController < ApplicationController
+  before_action :require_admin
   before_action :find_user,only: [:destroy]
 
   def new
@@ -32,4 +33,10 @@ class Admin::UsersController < ApplicationController
   def find_user
     @user=User.find(params[:id])
   end
+  def require_admin
+    if !current_user&.is_admin?
+      flash[:alert]="Admin Featured Actions!"
+      redirect_to admin_root_path
+    end
+   end
 end

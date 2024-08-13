@@ -1,0 +1,45 @@
+
+
+<%= form_with(model: @contact_info, url: admin_contact_info_path, method: :patch, local: true) do |f| %>
+  <% if @contact_info.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contact_info.errors.count, "error") %> prohibited this contact info from being saved:</h2>
+      <ul>
+        <% @contact_info.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+
+  <div class="mb-3">
+    <%= f.label :phone,"Phone" %>
+    <%= f.text_field :phone, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :email,"Email"  %>
+    <%= f.email_field :email, class: "form-control"  %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :address,"Address" %>
+    <%= f.text_area :address, class: "form-control"  %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :website,"Website" %>
+    <%= f.text_field :website, class: "form-control"  %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :store_timings,"Store-Timmimgs" %>
+    <%= f.text_field :store_timings, class: "form-control"  %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.submit 'Update Contact Info', class: "btn btn-primary" %>
+  </div>
+
+<% end %>

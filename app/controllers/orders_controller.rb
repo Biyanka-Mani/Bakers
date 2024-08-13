@@ -1,6 +1,8 @@
 class OrdersController < ApplicationController
   # app/controllers/orders_controller.rb
    before_action :AllProducts
+   before_action :set_order, only: [:confirmation]
+   before_action :authorize_order, only: [:confirmation]
   
   
   def new
@@ -29,8 +31,16 @@ class OrdersController < ApplicationController
     )
   end
   def AllProducts
-    @products = Product.all # Assuming you want to show all available products for selection
+    @products = Product.all
   end
-  
+  def set_order
+    @order = Order.find(params[:id])
+  end
+  def authorize_order
+    unless @order.id == session[:order_id]
+      flash[:alert] = "You are not authorized to view this order."
+      redirect_to root_path
+    end
+  end
 
 end

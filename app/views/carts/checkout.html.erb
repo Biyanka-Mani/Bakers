@@ -8,14 +8,23 @@
         <div class="mb-3">
           <%= f.label :customer_name, "Full Name", class: "form-label" %>
           <%= f.text_field :customer_name, class: "form-control", required: true %>
+          <% @order.errors.full_messages_for(:customer_name).each do |message| %>
+												<div><%= message %></div> 
+										<% end %>
         </div>
         <div class="mb-3">
           <%= f.label :customer_email, "Email", class: "form-label" %>
           <%= f.email_field :customer_email, class: "form-control", required: true %>
+          <% @order.errors.full_messages_for(:customer_email).each do |message| %>
+												<div><%= message %></div> 
+										<% end %>
         </div>
         <div class="mb-3">
           <%= f.label :customer_phone, "Phone Number", class: "form-label" %>
           <%= f.telephone_field :customer_phone, class: "form-control", required: true %>
+          <% @order.errors.full_messages_for(:customer_phone).each do |message| %>
+												<div><%= message %></div> 
+										<% end %>
         </div>
       </div>
       

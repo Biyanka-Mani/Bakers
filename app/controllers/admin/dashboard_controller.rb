@@ -1,4 +1,5 @@
 class Admin::DashboardController < ApplicationController
+  before_action :authenticate_user!
   def index
     @total_orders = Order.count
     @total_pending = Order.where.not(order_status: 'picked_up').count

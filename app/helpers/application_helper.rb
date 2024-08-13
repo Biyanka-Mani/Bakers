@@ -13,4 +13,7 @@ module ApplicationHelper
       'bg-secondary text-dark'
     end
   end
+  def contact_info
+    ContactInfo.first
+  end
 end
