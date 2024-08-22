@@ -11,7 +11,8 @@ class Admin::ContentManagementsController < ApplicationController
     if @content_management.update(content_management_params)
       redirect_to admin_content_management_path, notice: 'Content updated successfully.'
     else
-      render :edit
+       flash[:alert]="ContentError is Occured"
+      render :edit,status: :unprocessable_entity
     end
   end
 

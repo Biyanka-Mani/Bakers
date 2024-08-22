@@ -2,51 +2,81 @@
   <div class="mb-3">
     <%= form.label :home_page_category_header, "Category Header" %>
     <%= form.text_field :home_page_category_header, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:home_page_category_header).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+     <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :home_page_category_description, "Category Description" %>
     <%= form.text_area :home_page_category_description, class: "form-control", rows: 3 %>
+    <% @content_management.errors.full_messages_for(:home_page_category_description).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :home_page_baking_header, "Baking Header" %>
     <%= form.text_field :home_page_baking_header, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:home_page_baking_header).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :home_page_baking_description, "Baking Description" %>
     <%= form.text_area :home_page_baking_description, class: "form-control", rows: 3 %>
+     <% @content_management.errors.full_messages_for(:home_page_baking_description).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :baking_image, "Baking Image" %>
     <%= form.text_field :baking_image, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:baking_image).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :about_us_header, "About Us Header" %>
     <%= form.text_field :about_us_header, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:about_us_header).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :about_us_story, "Our Story" %>
     <%= form.text_area :about_us_story, class: "form-control", rows: 3 %>
+    <% @content_management.errors.full_messages_for(:about_us_story).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :master_baker_header, "Master Baker Header" %>
     <%= form.text_field :master_baker_header, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:master_baker_header).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :master_baker_description, "Master Baker Description" %>
     <%= form.text_area :master_baker_description, class: "form-control", rows: 3 %>
+     <% @content_management.errors.full_messages_for(:master_baker_description).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">
     <%= form.label :master_baker_image, "Master Baker Image" %>
     <%= form.text_field :master_baker_image, class: "form-control" %>
+    <% @content_management.errors.full_messages_for(:master_baker_image).each do |message| %>
+                <div class="text-danger"><%= message %></div>
+    <% end %>
   </div>
 
   <div class="mb-3">

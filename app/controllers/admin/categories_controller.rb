@@ -23,13 +23,11 @@ class Admin::CategoriesController < ApplicationController
               locals: { category: @category }
             )
           end
-          format.html { render :new, status: :unprocessable_entity }
+          format.html 
         end
       end
 
     end
-
-
 
   def destroy
     if @category.products.exists?
